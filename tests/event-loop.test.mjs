@@ -1,0 +1,12 @@
+import { test, beforeEach } from 'node:test'
+import assert from 'node:assert/strict'
+import { execFileSync } from 'node:child_process'
+import { asyncOperationDemo } from '../src/main.js'
+beforeEach(context => { context.mock.method(console, 'log', () => {}) })
+test('synchronous logs precede all callbacks', async () => { const order = []; const pending = asyncOperationDemo(operation => order.push(operation)); assert.deepEqual(order, []); assert.deepEqual(console.log.mock.calls.map(call => call.arguments[0]), ['Перший виклик', 'Останній виклик']); await pending })
+test('real callbacks follow the explicitly chained order', async () => { const order = []; await asyncOperationDemo(operation => order.push(operation)); assert.deepEqual(order, ['nextTick', 'setImmediate', 'setTimeout']) })
+test('each operation logs both execution and completion', async () => { await asyncOperationDemo(() => {}); assert.deepEqual(console.log.mock.calls.map(call => call.arguments[0]), ['Перший виклик', 'Останній виклик', 'Виконано nextTick', 'Завершено виконання: nextTick', 'Виконано setImmediate', 'Завершено виконання: setImmediate', 'Виконано setTimeout', 'Завершено виконання: setTimeout']) })
+test('invalid callback is rejected before scheduling', () => { assert.throws(() => asyncOperationDemo(null), /callback must be a function/); assert.equal(console.log.mock.callCount(), 0) })
+for (const operation of ['nextTick', 'setImmediate', 'setTimeout']) test(`callback failure in ${operation} rejects and prevents later callbacks`, async () => { const order = []; const error = new Error('Callback failed'); await assert.rejects(asyncOperationDemo(value => { order.push(value); if (value === operation) throw error }), error); await new Promise(resolve => setTimeout(resolve, 10)); assert.deepEqual(order, ['nextTick', 'setImmediate', 'setTimeout'].slice(0, ['nextTick', 'setImmediate', 'setTimeout'].indexOf(operation) + 1)) })
+test('concurrent demonstrations keep independent completion', async () => { const orders = Array.from({ length: 20 }, () => []); await Promise.all(orders.map(order => asyncOperationDemo(value => order.push(value)))); for (const order of orders) assert.deepEqual(order, ['nextTick', 'setImmediate', 'setTimeout']) })
+test('importing the module produces no side effects', () => { const url = new URL('../src/main.js', import.meta.url).href; assert.equal(execFileSync(process.execPath, ['--input-type=module', '-e', `await import(${JSON.stringify(url)})`], { encoding: 'utf8' }), '') })

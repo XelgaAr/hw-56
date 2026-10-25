@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-10-25T09:06:05.248Z",
+  "node": "v22.16.0",
+  "result": {
+    "order": [
+      "nextTick",
+      "setImmediate",
+      "setTimeout"
+    ],
+    "scheduling": "setTimeout is scheduled inside setImmediate"
+  },
+  "logs": [
+    {
+      "level": "log",
+      "text": "Перший виклик"
+    },
+    {
+      "level": "log",
+      "text": "Останній виклик"
+    },
+    {
+      "level": "log",
+      "text": "Виконано nextTick"
+    },
+    {
+      "level": "log",
+      "text": "Завершено виконання: nextTick"
+    },
+    {
+      "level": "log",
+      "text": "Виконано setImmediate"
+    },
+    {
+      "level": "log",
+      "text": "Завершено виконання: setImmediate"
+    },
+    {
+      "level": "log",
+      "text": "Виконано setTimeout"
+    },
+    {
+      "level": "log",
+      "text": "Завершено виконання: setTimeout"
+    }
+  ]
+}

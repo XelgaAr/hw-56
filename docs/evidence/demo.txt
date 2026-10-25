@@ -1,0 +1,14 @@
+
+> nodejs-hw03-tests@1.0.0 start
+> node scripts/demo.mjs
+
+Перший виклик
+Останній виклик
+Виконано nextTick
+Завершено виконання: nextTick
+Виконано setImmediate
+Завершено виконання: setImmediate
+Виконано setTimeout
+Завершено виконання: setTimeout
+Порядок callback: nextTick → setImmediate → setTimeout
+setTimeout запланирован из setImmediate: это явная последовательность, а не универсальный порядок независимых таймеров.

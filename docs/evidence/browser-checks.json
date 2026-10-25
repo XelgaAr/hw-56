@@ -1,0 +1,18 @@
+[
+  {
+    "homework": 56,
+    "viewport": "desktop",
+    "path": "/repository-check/",
+    "result": "passed",
+    "mode": "local DOM injection, fixture fetch; HTTP checked separately",
+    "browser_errors": []
+  },
+  {
+    "homework": 56,
+    "viewport": "mobile",
+    "path": "/repository-check/",
+    "result": "passed",
+    "mode": "local DOM injection, fixture fetch; HTTP checked separately",
+    "browser_errors": []
+  }
+]
